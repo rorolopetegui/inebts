@@ -26,17 +26,20 @@ class AddCitPage extends React.PureComponent {
         name: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.name : '',
         fLastName: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.fLastName : '',
         mLastName: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.mLastName : '',
-        gender: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.gender : '',
-        state: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.state : '',
-        city: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.city : '',
-        birthday: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.birthday : '',
+        gender: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.gender : 'male',
+        state: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.state : 'Maldonado',
+        city: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.city : 'Maldonado',
+        birthday: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.birthday : new Date().getTime(),
     }
     addCitizen = () => {
-        const { name, fLastname, mLastName, gender, state, city, birthday } = this.state
-        if (name !== "" && fLastname !== "" && mLastName !== "" && gender !== "" && state !== "" && city !== "" && birthday !== "")
-            this.props.addCitizen(name, fLastname, mLastName, gender, state, city, birthday)
-        else
+        const { name, fLastName, mLastName, gender, state, city, birthday } = this.state
+        if (name !== "" && fLastName !== "" && mLastName !== "" && gender !== "" && state !== "" && city !== "" && birthday !== "") {
+            console.log("fLastname", fLastName);
+            this.props.addCitizen(name, fLastName, mLastName, gender, state, city, birthday)
+            this.cancel();
+        } else {
             alert("Por favor complete todos los campos")
+        }
     }
     UpdateCitizen = () => {
         const { name, fLastName, mLastName, gender, state, city, birthday } = this.state
@@ -75,6 +78,11 @@ class AddCitPage extends React.PureComponent {
     handleState = (changeEvent) => {
         this.setState({
             state: changeEvent.target.value
+        })
+    }
+    handleCity = (changeEvent) => {
+        this.setState({
+            city: changeEvent.target.value
         })
     }
     handleCalendar = (selectedDate) => {
@@ -122,11 +130,20 @@ class AddCitPage extends React.PureComponent {
                     <input type="radio" name="gender" value="female" onChange={this.handleGender.bind(this)} checked={gender === 'female'} />Femenino
                 </div>
                 <div style={styles.divInput}>
-                    <select onChange={this.handleState.bind(this)} name="select">
-                        <option value="Montevideo" defaultValue={state === 'Montevideo'}>Montevideo</option>
-                        <option value="Maldonado" defaultValue={state === 'Maldonado'}>Maldonado</option>
-                        <option value="Salto" defaultValue={state === 'Salto'}>Salto</option>
+                    <select onChange={this.handleState.bind(this)} defaultValue={state} name="select">
+                        <option value="Montevideo" >Montevideo</option>
+                        <option value="Maldonado" >Maldonado</option>
+                        <option value="Salto" >Salto</option>
                     </select>
+                </div>
+                <div style={styles.divInput}>
+                    <input
+                        //style={!remarkName ? classes.input : classes.inputRemarked}
+                        type="text"
+                        value={this.state.city}
+                        placeholder={"Ciudad"}
+                        onChange={this.handleCity.bind(this)}
+                    />
                 </div>
                 <div style={styles.divInput}>
                     <Calendar startDate={this.state.birthday} onChange={this.handleCalendar.bind(this)} />

@@ -12,9 +12,6 @@ const styles = {
 }
 /* eslint-disable global-require */
 class HomeComponent extends Component {
-  loadCitizens = () => {
-    return <div>hello world!</div>
-  }
   gotoCitizenPage = () => {
     this.props.push('/addCitizen')
   }
@@ -78,7 +75,6 @@ class HomeComponent extends Component {
                   </tr>
                 )
               }
-              {console.log("citizens", this.props.citizens)}
             </tbody>
           </table>
         }
