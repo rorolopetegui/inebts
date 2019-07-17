@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { initialState, deleteCitizen } from '../../reducers/pageState'
+import { initialState, deleteCitizen, selectCitizen, addCitizen } from '../../reducers/pageState'
 import { push } from 'connected-react-router'
 
 import { CustomButton } from '../Buttons'
@@ -15,7 +15,7 @@ class HomeComponent extends Component {
   loadCitizens = () => {
     return <div>hello world!</div>
   }
-  addCitizen = () => {
+  gotoCitizenPage = () => {
     this.props.push('/addCitizen')
   }
   tellMyAge = (timestamp) => {
@@ -35,6 +35,11 @@ class HomeComponent extends Component {
   handleDeleteCitizen = (index) => {
     this.props.deleteCitizen(index);
   }
+  handleEditCitizen = (index) => {
+    this.props.selectCitizen(index);
+    this.gotoCitizenPage();
+  }
+
   render() {
     const citizens = this.props.citizens
     return (
@@ -67,19 +72,20 @@ class HomeComponent extends Component {
                     <td>{this.tellMyAge(item.birthday)}</td>
                     <td>{this.getMyBirthday(item.birthday)}</td>
                     <td>
-                      <CustomButton action={() => { console.log("editar", index) }}>Editar</CustomButton>
+                      <CustomButton action={this.handleEditCitizen.bind(this, index)}>Editar</CustomButton>
                       <CustomButton action={this.handleDeleteCitizen.bind(this, index)}>Borrar</CustomButton>
                     </td>
                   </tr>
                 )
               }
+              {console.log("citizens", this.props.citizens)}
             </tbody>
           </table>
         }
         {citizens.length === 0 &&
           <h1>Por favor ingrese ciudadanos para comenzar</h1>
         }
-        <CustomButton action={this.addCitizen.bind(this)}>Agregar</CustomButton>
+        <CustomButton action={this.gotoCitizenPage.bind(this)}>Agregar</CustomButton>
       </div>
     )
   }
@@ -100,7 +106,9 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       push,
-      deleteCitizen
+      deleteCitizen,
+      selectCitizen,
+      addCitizen
     },
     dispatch,
   )

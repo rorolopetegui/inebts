@@ -3,7 +3,7 @@ import Calendar from 'react-calendar'
 
 export default class cCalendar extends Component {
     state = {
-        date: new Date(),
+        date: this.props.startDate ? new Date(this.props.startDate) : new Date(),
     }
 
     onChange = (date) => {

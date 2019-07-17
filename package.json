@@ -84,6 +84,7 @@
     "minimist": "1.2.0",
     "prop-types": "15.6.2",
     "react": "16.6.0",
+    "react-addons-update": "^15.6.2",
     "react-calendar": "^2.19.0",
     "react-dnd": "^6.0.0",
     "react-dnd-html5-backend": "^6.0.0",

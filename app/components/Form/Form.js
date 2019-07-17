@@ -9,7 +9,7 @@ import CustomButton from '../Buttons/CustomButton'
 import Calendar from '../Calendar/Calendar'
 
 //Reducers
-import { addCitizen } from '../../reducers/pageState'
+import { initialState, addCitizen, updateCitizen, disableEdit } from '../../reducers/pageState'
 
 const styles = {
     container: {
@@ -23,13 +23,13 @@ const styles = {
 /* eslint-disable react/prefer-stateless-function */
 class AddCitPage extends React.PureComponent {
     state = {
-        name: '',
-        fLastname: '',
-        mLastName: '',
-        gender: 'male',
-        state: 'Montevideo',
-        city: 'Montevideo',
-        birthday: '',
+        name: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.name : '',
+        fLastName: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.fLastName : '',
+        mLastName: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.mLastName : '',
+        gender: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.gender : '',
+        state: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.state : '',
+        city: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.city : '',
+        birthday: this.props.selectedCitizenId !== null ? this.props.selectedCitizen.birthday : '',
     }
     addCitizen = () => {
         const { name, fLastname, mLastName, gender, state, city, birthday } = this.state
@@ -38,68 +38,61 @@ class AddCitPage extends React.PureComponent {
         else
             alert("Por favor complete todos los campos")
     }
+    UpdateCitizen = () => {
+        const { name, fLastName, mLastName, gender, state, city, birthday } = this.state
+        if (name !== "" && fLastName !== "" && mLastName !== "" && gender !== "" && state !== "" && city !== "" && birthday !== "") {
+            this.props.updateCitizen(name, fLastName, mLastName, gender, state, city, birthday)
+            this.cancel();
+        } else {
+            alert("Por favor complete todos los campos")
+        }
+    }
     cancel = () => {
+        this.props.disableEdit();
         this.props.push('/')
     }
 
     handleGender = (changeEvent) => {
-        console.log("you changed to: ", changeEvent.target.value)
         this.setState({
             gender: changeEvent.target.value
         })
     }
     handleName = (changeEvent) => {
-        console.log("you changed to: ", changeEvent.target.value)
         this.setState({
             name: changeEvent.target.value
         })
     }
     handleFLastName = (changeEvent) => {
-        console.log("you changed to: ", changeEvent.target.value)
         this.setState({
-            fLastname: changeEvent.target.value
+            fLastName: changeEvent.target.value
         })
     }
     handleMLastName = (changeEvent) => {
-        console.log("you changed to: ", changeEvent.target.value)
         this.setState({
             mLastName: changeEvent.target.value
         })
     }
     handleState = (changeEvent) => {
-        console.log("you changed to: ", changeEvent.target.value)
         this.setState({
             state: changeEvent.target.value
         })
     }
     handleCalendar = (selectedDate) => {
-        console.log("you pick: ", selectedDate)
         this.setState({
             birthday: selectedDate
         })
     }
-    fillWithPeople = () => {
-        var date = new Date()
-        date.setFullYear(date.getFullYear() - 27)
-        this.props.addCitizen("Rodrigo", "Lopetegui", "Garcia", "male", "Montevideo", "Montevideo", date.getTime())
-        date = new Date()
-        date.setFullYear(date.getFullYear() - 31)
-        this.props.addCitizen("Paula", "Mesa", "Garcia", "female", "Montevideo", "Montevideo", date.getTime())
-        date = new Date()
-        date.setFullYear(date.getFullYear() - 35)
-        this.props.addCitizen("Lucio", "Andres", "Tuvieja", "male", "SantaFe", "Rosario", date.getTime())
-    }
+
+
     render() {
         const { gender, state } = this.state
-        const { id } = this.props
         return (
             <div style={styles.container}>
-                {this.fillWithPeople()}
                 <div style={styles.divInput}>
                     <input
                         //style={!remarkName ? classes.input : classes.inputRemarked}
                         type="text"
-                        //value={this.state.fname}
+                        value={this.state.name}
                         placeholder={"Mi nombre es"}
                         onChange={this.handleName.bind(this)}
                     />
@@ -108,7 +101,7 @@ class AddCitPage extends React.PureComponent {
                     <input
                         //style={!remarkName ? classes.input : classes.inputRemarked}
                         type="text"
-                        //value={this.state.fname}
+                        value={this.state.fLastName}
                         placeholder={"Apellido paterno"}
                         onChange={this.handleFLastName.bind(this)}
                     />
@@ -117,7 +110,7 @@ class AddCitPage extends React.PureComponent {
                     <input
                         //style={!remarkName ? classes.input : classes.inputRemarked}
                         type="text"
-                        //value={this.state.fname}
+                        value={this.state.mLastName}
                         placeholder={"Apellido materno"}
                         onChange={this.handleMLastName.bind(this)}
                     />
@@ -136,10 +129,13 @@ class AddCitPage extends React.PureComponent {
                     </select>
                 </div>
                 <div style={styles.divInput}>
-                    <Calendar onChange={this.handleCalendar.bind(this)} />
+                    <Calendar startDate={this.state.birthday} onChange={this.handleCalendar.bind(this)} />
                 </div>
-                {
-                <CustomButton action={this.addCitizen.bind(this)}>Agregar</CustomButton>
+                {this.props.selectedCitizenId === null &&
+                    <CustomButton action={this.addCitizen.bind(this)}>Agregar</CustomButton>
+                }
+                {this.props.selectedCitizenId !== null &&
+                    <CustomButton action={this.UpdateCitizen.bind(this)}>Editar</CustomButton>
                 }
                 <CustomButton action={this.cancel.bind(this)}>Cancelar</CustomButton>
             </div>
@@ -148,20 +144,32 @@ class AddCitPage extends React.PureComponent {
 }
 
 AddCitPage.propTypes = {
-    id: PropTypes.number,
     addCitizen: PropTypes.func.isRequired,
+    updateCitizen: PropTypes.func.isRequired,
+    selectedCitizenId: PropTypes.number,
+    selectedCitizen: PropTypes.object,
+}
+
+const mapStateToProps = (state) => {
+    const p = state.get('pageState', initialState)
+    return {
+        selectedCitizenId: p.selectedCitizenId,
+        selectedCitizen: p.selectedCitizen,
+    }
 }
 
 const mapDispatchToProps = dispatch =>
     bindActionCreators(
         {
             addCitizen,
+            updateCitizen,
+            disableEdit,
             push
         },
         dispatch,
     )
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps,
 )(AddCitPage)
