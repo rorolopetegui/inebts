@@ -7,6 +7,7 @@ import { push } from 'connected-react-router'
 //Comps
 import CustomButton from '../Buttons/CustomButton'
 import Calendar from '../Calendar/Calendar'
+import RadioButtonGender from '../Buttons/RadioButtonGender'
 
 //Reducers
 import { initialState, addCitizen, updateCitizen, disableEdit } from '../../reducers/pageState'
