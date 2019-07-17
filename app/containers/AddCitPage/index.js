@@ -21,16 +21,25 @@ const styles = {
 
 /* eslint-disable react/prefer-stateless-function */
 class AddCitPage extends React.PureComponent {
+  state = {
+    name: '',
+    fLastname: '',
+    mLastName: '',
+    gender: 'male',
+    state: '',
+    city: '',
+    birthday: '',
+  }
   addCitizen = () => {
-    console.log("añadir citizen");
     this.props.addCitizen('Rodrigo', 'Lopetegui', 'Garcia', 'male', 'Montevideo', 'Montevideo', '10111991');
-    this.props.addCitizen('Rodrigo', 'Lopetegui', 'Garcia', 'male', 'Montevideo', 'Montevideo', '10111991');
-    console.log("finish citizen");
   }
   cancel = () => {
     this.props.push('/')
   }
 
+  handleGender = (e) => {
+    console.log("change", e);
+  }
   render() {
     return (
       <div style={styles.container}>
@@ -63,10 +72,10 @@ class AddCitPage extends React.PureComponent {
           />
         </div>
         <div style={styles.divInput}>
-          <input type="radio" name="gender" value="male" checked />Masculino
+          <input type="radio" name="gender" value="male" checked onChange={this.handleGender.bind(this)} />Masculino
         </div>
         <div style={styles.divInput}>
-          <input type="radio" name="gender" value="female" />Femenino
+          <input type="radio" name="gender" value="female" onChange={this.handleGender.bind(this)}/>Femenino
         </div>
         <div style={styles.divInput}>
           <select name="select">
