@@ -9,6 +9,7 @@ export default class cCalendar extends Component {
     onChange = (date) => {
         //console.log("Change", date)
         this.setState({ date })
+        this.props.onChange(date.getTime())
     }
 
     render = () => {
