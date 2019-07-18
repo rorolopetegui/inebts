@@ -1,6 +1,6 @@
 import React from 'react'
 //Comps
-import { Form } from './../../components'
+import { AddCitizenForm } from './../../components'
 
 const styles = {
  
@@ -10,7 +10,7 @@ const styles = {
 export default class AddCitPage extends React.PureComponent {
   render() {
     return (  
-      <Form />
+      <AddCitizenForm />
     )
   }
 }

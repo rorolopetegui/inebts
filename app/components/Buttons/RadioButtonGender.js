@@ -1,19 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 
-export default function RadioButtonGender() {
-    const [value, setValue] = React.useState('hombre');
-
-    function handleChange(event) {
-        setValue(event.target.value);
-    }
-
+function RadioButtonGender(props) {
     return (
         <FormControl component="fieldset">
-            <RadioGroup aria-label="position" name="position" value={value} onChange={handleChange} row>
+            <RadioGroup aria-label="position" name="position" value={props.selectedValue} onChange={props.handleChangeAction} row>
                 <FormControlLabel
                     value="hombre"
                     control={<Radio color="primary" />}
@@ -30,3 +25,10 @@ export default function RadioButtonGender() {
         </FormControl>
     );
 }
+
+RadioButtonGender.propTypes = {
+    handleChangeAction: PropTypes.func.isRequired,
+    selectedValue: PropTypes.string.isRequired
+};
+
+export default RadioButtonGender;

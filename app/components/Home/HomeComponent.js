@@ -2,86 +2,86 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { initialState, deleteCitizen, selectCitizen, addCitizen } from '../../reducers/pageState'
+import { initialState, addCitizen } from '../../reducers/pageState'
 import { push } from 'connected-react-router'
 
-import { CustomButton } from '../Buttons'
+//Material UI comps
+import Button from '@material-ui/core/Button'
+import { SimpleTable } from '../Table';
+import Typography from '@material-ui/core/Typography';
+
+import faker from 'faker';
 
 const styles = {
-
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    width: '50%',
+    margin: '0 auto',
+  },
+  centerContent: {
+    display: 'inline-block',
+    margin: 'auto',
+  },
+  button: {
+    margin: '1rem'
+  }
 }
+
+const numberOfMocks = 5;
+
 /* eslint-disable global-require */
 class HomeComponent extends Component {
   gotoCitizenPage = () => {
     this.props.push('/addCitizen')
   }
-  tellMyAge = (timestamp) => {
-    var birthday = new Date(timestamp)
-    var now = new Date()
-    const diffTime = Math.abs(now.getTime() - birthday.getTime())
-    const diffYears = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 365))
-    return diffYears
+  generateMock = () => {
+    for (let i = 0; i < numberOfMocks; i++) {
+      var azar = Math.round(Math.random())
+      var randomName = faker.name.firstName()
+      var fLastName = faker.name.lastName()
+      var mLastName = faker.name.lastName()
+      var gender = azar === 1 ? "hombre" : "mujer"
+      var state = faker.address.state()
+      var city = faker.address.city()
+      var birthday = faker.date.past(60).getTime()
+      console.log("trying to add")
+      console.log("randomName: " + randomName)
+      console.log("fLastName: " + fLastName)
+      console.log("mLastName: " + mLastName)
+      console.log("gender: " + gender)
+      console.log("state: " + state)
+      console.log("city: " + city)
+      console.log("birthday: " + birthday)
+      this.props.addCitizen(randomName, fLastName, mLastName, gender, state, city, birthday)
+    }
   }
-  getMyBirthday = (timestamp) => {
-    var birthday = new Date(timestamp)
-    var month = birthday.getMonth() + 1
-    var day = birthday.getDate()
-    var year = birthday.getFullYear()
-    return day + "/" + month + "/" + year
-  }
-  handleDeleteCitizen = (index) => {
-    this.props.deleteCitizen(index);
-  }
-  handleEditCitizen = (index) => {
-    this.props.selectCitizen(index);
-    this.gotoCitizenPage();
-  }
-
   render() {
     const citizens = this.props.citizens
     return (
       <div>
         {citizens.length > 0 &&
-          <table>
-            <thead>
-              <tr>
-                <td>Nombre</td>
-                <td>Apellido paterno</td>
-                <td>Apellido materno</td>
-                <td>Sexo</td>
-                <td>Estado</td>
-                <td>Ciudad</td>
-                <td>Edad</td>
-                <td>Cumpleaños</td>
-                <td>Acciones</td>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                citizens.map((item, index) =>
-                  <tr key={index}>
-                    <td>{item.name}</td>
-                    <td>{item.fLastName}</td>
-                    <td>{item.mLastName}</td>
-                    <td>{item.gender}</td>
-                    <td>{item.state}</td>
-                    <td>{item.city}</td>
-                    <td>{this.tellMyAge(item.birthday)}</td>
-                    <td>{this.getMyBirthday(item.birthday)}</td>
-                    <td>
-                      <CustomButton action={this.handleEditCitizen.bind(this, index)}>Editar</CustomButton>
-                      <CustomButton action={this.handleDeleteCitizen.bind(this, index)}>Borrar</CustomButton>
-                    </td>
-                  </tr>
-                )
-              }
-            </tbody>
-          </table>
+          <SimpleTable />
         }
         {citizens.length === 0 &&
-          <h1>Por favor ingrese ciudadanos para comenzar</h1>
+          <div style={styles.container}>
+            <div style={styles.centerContent}>
+              <Typography variant="h3" gutterBottom>
+                Lista vacia, ingrese ciudadanos
+              </Typography>
+            </div>
+          </div>
         }
-        <CustomButton action={this.gotoCitizenPage.bind(this)}>Agregar</CustomButton>
+        <div style={styles.container}>
+          <div style={styles.centerContent}>
+            <Button variant="outlined" color="primary" style={styles.button} onClick={this.gotoCitizenPage.bind(this)}>
+              Agregar nuevo ciudadano
+            </Button>
+            <Button variant="outlined" color="primary" style={styles.button} onClick={this.generateMock.bind(this)}>
+              Generar Mock
+            </Button>
+          </div>
+        </div>
       </div>
     )
   }
@@ -102,8 +102,6 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       push,
-      deleteCitizen,
-      selectCitizen,
       addCitizen
     },
     dispatch,

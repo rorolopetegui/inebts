@@ -16,29 +16,26 @@ const useStyles = makeStyles(theme => ({
 
 function OutlinedTextField(props) {
     const classes = useStyles();
-    const [values, setValues] = React.useState({
-        text: '',
-    });
 
-    const handleChange = name => event => {
-        setValues({ ...values, [name]: event.target.value });
-    };
     const { label, required } = props;
     return (
         <TextField
             required={required}
             id="outlined-required"
             label={label}
-            onChange={handleChange('name')}
+            onChange={props.handleChangeAction}
             className={classes.textField}
             margin="normal"
             variant="outlined"
+            defaultValue={props.dValue}
         />
     );
 }
 
 OutlinedTextField.propTypes = {
     label: PropTypes.string.isRequired,
+    handleChangeAction: PropTypes.func.isRequired,
+    dValue: PropTypes.string.isRequired,
     required: PropTypes.bool
 };
 
