@@ -78,7 +78,7 @@ class HomeComponent extends Component {
               Agregar nuevo ciudadano
             </Button>
             <Button variant="outlined" color="primary" style={styles.button} onClick={this.generateMock.bind(this)}>
-              Generar Mock
+              Generar Mock ({numberOfMocks})
             </Button>
           </div>
         </div>

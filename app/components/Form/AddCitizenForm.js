@@ -147,15 +147,15 @@ class AddCitizenForm extends Component {
         const { name, fLastName, mLastName } = this.state
         var ret = false;
         if (/[^a-z]/i.test(name)) {
-            alert("Nombre puede contener unicamente letras")
+            alert("Nombre puede contener unicamente letras, sin espacios ni tildes")
             ret = true;
         }
         if (/[^a-z]/i.test(fLastName)) {
-            alert("Apellido paterno puede contener unicamente letras")
+            alert("Apellido paterno puede contener unicamente letras, sin espacios ni tildes")
             ret = true;
         }
         if (/[^a-z]/i.test(mLastName)) {
-            alert("Apellido materno puede contener unicamente letras")
+            alert("Apellido materno puede contener unicamente letras, sin espacios ni tildes")
             ret = true;
         }
         return ret;
