@@ -81,6 +81,11 @@ const styles = {
         display: 'inline-block',
         margin: 'auto',
     },
+    centerContentCalendar: {
+        display: 'inline-block',
+        margin: 'auto',
+        textAlign: 'center',
+    },
     button: {
         margin: '1rem'
     }
@@ -141,15 +146,15 @@ class AddCitizenForm extends Component {
     checkForError = () => {
         const { name, fLastName, mLastName } = this.state
         var ret = false;
-        if (/[^a-z]/i.test(name)){
+        if (/[^a-z]/i.test(name)) {
             alert("Nombre puede contener unicamente letras")
             ret = true;
         }
-        if (/[^a-z]/i.test(fLastName)){
+        if (/[^a-z]/i.test(fLastName)) {
             alert("Apellido paterno puede contener unicamente letras")
             ret = true;
         }
-        if (/[^a-z]/i.test(mLastName)){
+        if (/[^a-z]/i.test(mLastName)) {
             alert("Apellido materno puede contener unicamente letras")
             ret = true;
         }
@@ -202,14 +207,14 @@ class AddCitizenForm extends Component {
                 <div style={styles.container}>
                     <div style={styles.centerContent}>
                         <Select
-                            label={"Estado"}
+                            label={"Estado natal"}
                             helperText={"Seleccione su departamento"}
                             objects={states}
                             defaultValue={this.state.selectedState}
                             handleChangeAction={this.handleChangeState.bind(this)}
                         />
                         <Select
-                            label={"Ciudad"}
+                            label={"Ciudad natal"}
                             helperText={"Seleccione su ciudad"}
                             objects={this.state.cities}
                             defaultValue={this.state.selectedCity}
@@ -218,7 +223,10 @@ class AddCitizenForm extends Component {
                     </div>
                 </div>
                 <div style={styles.container}>
-                    <div style={styles.centerContent}>
+                    <div style={styles.centerContentCalendar}>
+                        <Typography variant="h8" >
+                            Indique su fecha de nacimiento
+                        </Typography>
                         <Calendar startDate={this.state.birthday} onChange={this.handleChangeChildren('birthday', false)} />
                     </div>
                 </div>
